@@ -38,7 +38,7 @@ func (r *SummaryRepository) SummaryByDate(ctx context.Context, date string) (*mo
 	}
 	summary.ByCategory = breakdown
 
-	return nil, nil
+	return summary, nil
 }
 
 func (r *SummaryRepository) SummaryByMonth(ctx context.Context, month string) (*model.MonthlySummary, error) {

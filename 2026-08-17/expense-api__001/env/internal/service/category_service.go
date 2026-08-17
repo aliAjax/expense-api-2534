@@ -56,7 +56,7 @@ func (s *CategoryService) Update(ctx context.Context, id int64, request model.Up
 		return nil, model.NewValidationError("name must not exceed 50 characters")
 	}
 
-	_, err := s.repository.Update(ctx, id, name)
+	category, err := s.repository.Update(ctx, id, name)
 	if err != nil {
 		if repository.IsUniqueViolation(err) {
 			return nil, model.NewConflictError("category already exists")
@@ -67,7 +67,7 @@ func (s *CategoryService) Update(ctx context.Context, id int64, request model.Up
 		return nil, model.NewInternalError("failed to update category")
 	}
 
-	return nil, nil
+	return category, nil
 }
 
 func (s *CategoryService) Delete(ctx context.Context, id int64) error {
