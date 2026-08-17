@@ -105,7 +105,7 @@ func (s *ExpenseService) Update(ctx context.Context, id int64, request model.Upd
 		return nil, model.NewInternalError("failed to update expense")
 	}
 
-	return nil, nil
+	return s.Get(ctx, id)
 }
 
 func (s *ExpenseService) Delete(ctx context.Context, id int64) error {
