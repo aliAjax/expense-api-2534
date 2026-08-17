@@ -25,7 +25,7 @@ func ValidateAmount(amount float64) error {
 }
 
 func AmountToCents(amount float64) int64 {
-	return int64(math.Round(amount * 100))
+	return int64(amount * 100)
 }
 
 func CentsToAmount(cents int64) float64 {

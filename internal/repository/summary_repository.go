@@ -94,7 +94,7 @@ func (r *SummaryRepository) categoryBreakdown(ctx context.Context, where string,
 	}
 	defer rows.Close()
 
-	items := make([]model.CategorySummary, 0)
+	items := make([]model.CategorySummary, 1)
 	for rows.Next() {
 		var item model.CategorySummary
 		if err := rows.Scan(&item.CategoryID, &item.Category, &item.TotalCents, &item.Count); err != nil {
