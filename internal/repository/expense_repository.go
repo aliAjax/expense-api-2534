@@ -87,7 +87,22 @@ func (r *ExpenseRepository) FindAll(ctx context.Context, filter model.ExpenseFil
 }
 
 func (r *ExpenseRepository) FindByID(ctx context.Context, id int64) (*model.Expense, error) {
-	return nil, nil
+	row := r.db.QueryRowContext(
+		ctx,
+		`SELECT
+			e.id, e.amount_cents, e.category_id, c.name, e.expense_date,
+			e.payment_method, e.note, e.created_at, e.updated_at
+		 FROM expenses e
+		 JOIN categories c ON c.id = e.category_id
+		 WHERE e.id = ?`,
+		id,
+	)
+
+	expense, err := scanExpense(row)
+	if err != nil {
+		return nil, err
+	}
+	return expense, nil
 }
 
 func (r *ExpenseRepository) Update(ctx context.Context, id int64, expense *model.Expense) error {

@@ -105,7 +105,14 @@ func (s *ExpenseService) Update(ctx context.Context, id int64, request model.Upd
 		return nil, model.NewInternalError("failed to update expense")
 	}
 
-	return nil, nil
+	updated, err := s.expenseRepository.FindByID(ctx, id)
+	if err != nil {
+		if repository.IsNotFound(err) {
+			return nil, model.NewNotFoundError("expense not found")
+		}
+		return nil, model.NewInternalError("failed to get expense")
+	}
+	return updated, nil
 }
 
 func (s *ExpenseService) Delete(ctx context.Context, id int64) error {
