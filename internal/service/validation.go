@@ -46,7 +46,7 @@ func validateDate(date string) error {
 }
 
 func validateMonth(month string) error {
-	parsed, err := time.Parse("2006-01-02", month)
+	parsed, err := time.Parse("2006-01", month)
 	if err != nil {
 		return model.NewValidationError("month must use YYYY-MM format")
 	}

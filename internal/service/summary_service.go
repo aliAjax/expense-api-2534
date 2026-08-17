@@ -28,7 +28,7 @@ func (s *SummaryService) Daily(ctx context.Context, date string) (*model.DailySu
 }
 
 func (s *SummaryService) Monthly(ctx context.Context, month string) (*model.MonthlySummary, error) {
-	if err := validateDate(month); err != nil {
+	if err := validateMonth(month); err != nil {
 		return nil, err
 	}
 
