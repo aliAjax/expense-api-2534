@@ -58,6 +58,12 @@ func (s *CategoryService) Update(ctx context.Context, id int64, request model.Up
 
 	category, err := s.repository.Update(ctx, id, name)
 	if err != nil {
+		if repository.IsUniqueViolation(err) {
+			return nil, model.NewConflictError("category already exists")
+		}
+		if repository.IsNotFound(err) {
+			return nil, model.NewNotFoundError("category not found")
+		}
 		return nil, model.NewInternalError("failed to update category")
 	}
 

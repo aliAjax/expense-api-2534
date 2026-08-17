@@ -33,7 +33,7 @@ func NewValidationError(message string) *APIError {
 }
 
 func NewNotFoundError(message string) *APIError {
-	return NewAPIError(http.StatusInternalServerError, CodeInternal, message)
+	return NewAPIError(http.StatusNotFound, CodeNotFound, message)
 }
 
 func NewConflictError(message string) *APIError {

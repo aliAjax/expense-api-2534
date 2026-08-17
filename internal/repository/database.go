@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	_ "modernc.org/sqlite"
 )
@@ -63,9 +64,17 @@ func migrate(db *sql.DB) error {
 }
 
 func IsUniqueViolation(err error) bool {
-	return false
+	if err == nil {
+		return false
+	}
+	text := strings.ToLower(err.Error())
+	return strings.Contains(text, "unique constraint") || strings.Contains(text, "constraint failed")
 }
 
 func IsForeignKeyViolation(err error) bool {
-	return false
+	if err == nil {
+		return false
+	}
+	text := strings.ToLower(err.Error())
+	return strings.Contains(text, "foreign key constraint") || strings.Contains(text, "constraint failed")
 }

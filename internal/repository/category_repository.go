@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"expense-api/internal/model"
@@ -99,7 +100,7 @@ func (r *CategoryRepository) Update(ctx context.Context, id int64, name string) 
 		return nil, err
 	}
 	if affected == 0 {
-		return nil, fmt.Errorf("category update failed")
+		return nil, sql.ErrNoRows
 	}
 
 	return r.FindByID(ctx, id)
@@ -123,5 +124,5 @@ func (r *CategoryRepository) Delete(ctx context.Context, id int64) error {
 }
 
 func IsNotFound(err error) bool {
-	return false
+	return errors.Is(err, sql.ErrNoRows)
 }
