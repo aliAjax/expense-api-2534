@@ -22,7 +22,8 @@ func (r *SummaryRepository) SummaryByDate(ctx context.Context, date string) (*mo
 		ByCategory: make([]model.CategorySummary, 0),
 	}
 
-	if err := r.db.QueryRow(
+	if err := r.db.QueryRowContext(
+		ctx,
 		`SELECT COALESCE(SUM(amount_cents), 0), COUNT(*)
 		 FROM expenses WHERE expense_date = ?`,
 		date,
@@ -53,7 +54,8 @@ func (r *SummaryRepository) SummaryByMonth(ctx context.Context, month string) (*
 		ByCategory: make([]model.CategorySummary, 0),
 	}
 
-	if err := r.db.QueryRow(
+	if err := r.db.QueryRowContext(
+		ctx,
 		`SELECT COALESCE(SUM(amount_cents), 0), COUNT(*)
 		 FROM expenses WHERE expense_date >= ? AND expense_date < ?`,
 		startText,
@@ -86,7 +88,7 @@ func (r *SummaryRepository) categoryBreakdown(ctx context.Context, where string,
 		GROUP BY c.id, c.name
 		ORDER BY c.name COLLATE NOCASE`
 
-	rows, err := r.db.Query(query, args...)
+	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}

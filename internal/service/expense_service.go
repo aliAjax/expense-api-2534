@@ -57,7 +57,7 @@ func (s *ExpenseService) Create(ctx context.Context, request model.CreateExpense
 }
 
 func (s *ExpenseService) List(ctx context.Context, filter model.ExpenseFilter) ([]model.Expense, error) {
-	expenses, err := s.expenseRepository.FindAll(context.Background(), filter)
+	expenses, err := s.expenseRepository.FindAll(ctx, filter)
 	if err != nil {
 		return nil, model.NewInternalError("failed to list expenses")
 	}
