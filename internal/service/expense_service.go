@@ -52,7 +52,7 @@ func (s *ExpenseService) Create(ctx context.Context, request model.CreateExpense
 	}
 
 	expense.ID = id
-	expense.Amount = request.Amount
+	expense.Amount = model.CentsToAmount(expense.AmountCents)
 	return expense, nil
 }
 
