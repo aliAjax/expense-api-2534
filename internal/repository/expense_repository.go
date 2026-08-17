@@ -18,8 +18,7 @@ func NewExpenseRepository(db *sql.DB) *ExpenseRepository {
 }
 
 func (r *ExpenseRepository) Create(ctx context.Context, expense *model.Expense) (int64, error) {
-	result, err := r.db.ExecContext(
-		ctx,
+	result, err := r.db.Exec(
 		`INSERT INTO expenses
 			(amount_cents, category_id, expense_date, payment_method, note, created_at, updated_at)
 		 VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -65,7 +64,7 @@ func (r *ExpenseRepository) FindAll(ctx context.Context, filter model.ExpenseFil
 	}
 	query += " ORDER BY e.expense_date DESC, e.id DESC"
 
-	rows, err := r.db.QueryContext(ctx, query, args...)
+	rows, err := r.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +86,7 @@ func (r *ExpenseRepository) FindAll(ctx context.Context, filter model.ExpenseFil
 }
 
 func (r *ExpenseRepository) FindByID(ctx context.Context, id int64) (*model.Expense, error) {
-	row := r.db.QueryRowContext(
-		ctx,
+	row := r.db.QueryRow(
 		`SELECT
 			e.id, e.amount_cents, e.category_id, c.name, e.expense_date,
 			e.payment_method, e.note, e.created_at, e.updated_at
@@ -102,8 +100,7 @@ func (r *ExpenseRepository) FindByID(ctx context.Context, id int64) (*model.Expe
 }
 
 func (r *ExpenseRepository) Update(ctx context.Context, id int64, expense *model.Expense) error {
-	result, err := r.db.ExecContext(
-		ctx,
+	result, err := r.db.Exec(
 		`UPDATE expenses
 		 SET amount_cents = ?, category_id = ?, expense_date = ?, payment_method = ?, note = ?, updated_at = ?
 		 WHERE id = ?`,
@@ -130,7 +127,7 @@ func (r *ExpenseRepository) Update(ctx context.Context, id int64, expense *model
 }
 
 func (r *ExpenseRepository) Delete(ctx context.Context, id int64) error {
-	result, err := r.db.ExecContext(ctx, `DELETE FROM expenses WHERE id = ?`, id)
+	result, err := r.db.Exec(`DELETE FROM expenses WHERE id = ?`, id)
 	if err != nil {
 		return err
 	}

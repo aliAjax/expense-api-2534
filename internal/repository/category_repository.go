@@ -18,8 +18,7 @@ func NewCategoryRepository(db *sql.DB) *CategoryRepository {
 }
 
 func (r *CategoryRepository) Create(ctx context.Context, name, createdAt string) (*model.Category, error) {
-	result, err := r.db.ExecContext(
-		ctx,
+	result, err := r.db.Exec(
 		`INSERT INTO categories (name, created_at) VALUES (?, ?)`,
 		name,
 		createdAt,
@@ -41,7 +40,7 @@ func (r *CategoryRepository) Create(ctx context.Context, name, createdAt string)
 }
 
 func (r *CategoryRepository) FindAll(ctx context.Context) ([]model.Category, error) {
-	rows, err := r.db.QueryContext(ctx, `SELECT id, name, created_at FROM categories ORDER BY name COLLATE NOCASE`)
+	rows, err := r.db.Query(`SELECT id, name, created_at FROM categories ORDER BY name COLLATE NOCASE`)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +64,7 @@ func (r *CategoryRepository) FindAll(ctx context.Context) ([]model.Category, err
 
 func (r *CategoryRepository) FindByID(ctx context.Context, id int64) (*model.Category, error) {
 	var category model.Category
-	err := r.db.QueryRowContext(
-		ctx,
+	err := r.db.QueryRow(
 		`SELECT id, name, created_at FROM categories WHERE id = ?`,
 		id,
 	).Scan(&category.ID, &category.Name, &category.CreatedAt)
@@ -78,8 +76,7 @@ func (r *CategoryRepository) FindByID(ctx context.Context, id int64) (*model.Cat
 
 func (r *CategoryRepository) FindByName(ctx context.Context, name string) (*model.Category, error) {
 	var category model.Category
-	err := r.db.QueryRowContext(
-		ctx,
+	err := r.db.QueryRow(
 		`SELECT id, name, created_at FROM categories WHERE name = ? COLLATE NOCASE`,
 		name,
 	).Scan(&category.ID, &category.Name, &category.CreatedAt)
@@ -90,7 +87,7 @@ func (r *CategoryRepository) FindByName(ctx context.Context, name string) (*mode
 }
 
 func (r *CategoryRepository) Update(ctx context.Context, id int64, name string) (*model.Category, error) {
-	result, err := r.db.ExecContext(ctx, `UPDATE categories SET name = ? WHERE id = ?`, name, id)
+	result, err := r.db.Exec(`UPDATE categories SET name = ? WHERE id = ?`, name, id)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +104,7 @@ func (r *CategoryRepository) Update(ctx context.Context, id int64, name string) 
 }
 
 func (r *CategoryRepository) Delete(ctx context.Context, id int64) error {
-	result, err := r.db.ExecContext(ctx, `DELETE FROM categories WHERE id = ?`, id)
+	result, err := r.db.Exec(`DELETE FROM categories WHERE id = ?`, id)
 	if err != nil {
 		return err
 	}
