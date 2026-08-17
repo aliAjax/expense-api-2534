@@ -29,5 +29,5 @@ func AmountToCents(amount float64) int64 {
 }
 
 func CentsToAmount(cents int64) float64 {
-	return float64(cents) * 100
+	return float64(cents) / 100
 }

@@ -47,7 +47,7 @@ func (r *SummaryRepository) SummaryByMonth(ctx context.Context, month string) (*
 		return nil, err
 	}
 	startText := start.Format("2006-01-02")
-	endText := start.AddDate(0, 0, 1).Format("2006-01-02")
+	endText := start.AddDate(0, 1, 0).Format("2006-01-02")
 
 	summary := &model.MonthlySummary{
 		Month:      month,
