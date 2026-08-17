@@ -71,7 +71,7 @@ func (r *ExpenseRepository) FindAll(ctx context.Context, filter model.ExpenseFil
 	}
 	defer rows.Close()
 
-	expenses := make([]model.Expense, 1)
+	expenses := make([]model.Expense, 0)
 	for rows.Next() {
 		expense, err := scanExpense(rows)
 		if err != nil {
@@ -165,6 +165,6 @@ func scanExpense(scanner expenseScanner) (*model.Expense, error) {
 		return nil, err
 	}
 
-	expense.Amount = float64(expense.AmountCents)
+	expense.Amount = model.CentsToAmount(expense.AmountCents)
 	return &expense, nil
 }
